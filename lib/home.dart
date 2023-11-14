@@ -15,7 +15,26 @@ class HomeScreen extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute<ProfileScreen>(
-                  builder: (context) => const ProfileScreen(),
+                  builder: (context) => ProfileScreen(
+                    appBar: AppBar(
+                      title: const Text('User Profile'),
+                    ),
+                    actions: [
+                      SignedOutAction((context) {
+                        Navigator.of(context).pop();
+                      })
+                    ],
+                    children: [
+                      const Divider(),
+                      Padding(
+                        padding: const EdgeInsets.all(2),
+                        child: AspectRatio(
+                          aspectRatio: 1,
+                          child: Image.asset('flutterfire_300x.png'),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               );
             },
@@ -26,7 +45,7 @@ class HomeScreen extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            Image.asset('assets/dash.png'),
+            Image.asset('dash.png'),
             Text(
               'Welcome!',
               style: Theme.of(context).textTheme.displaySmall,
