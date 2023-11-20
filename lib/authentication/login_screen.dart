@@ -1,3 +1,4 @@
+import 'package:charity_app/authentication/signup_screen.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -5,7 +6,6 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -16,7 +16,7 @@ class LoginScreen extends StatelessWidget {
               children: [
                 Image(
                   image: AssetImage('assets/login-image.png'),
-                  height: size.height * 0.3,
+                  height: MediaQuery.of(context).size.height * 0.3,
                 ),
                 const Text("Welcome!"),
                 const Text("Dontate where you want, when you want."),
@@ -66,7 +66,15 @@ class LoginScreen extends StatelessWidget {
                           children: [
                             const Text("Don't have an account?"),
                             TextButton(
-                                onPressed: () {}, child: const Text("Register"))
+                              onPressed: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => const SignUpScreen(),
+                                  ),
+                                );
+                              },
+                              child: const Text("Register"),
+                            )
                           ],
                         )
                       ],
