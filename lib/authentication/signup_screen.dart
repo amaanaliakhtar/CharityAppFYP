@@ -15,11 +15,15 @@ class SignUpScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Image(
-                  image: const AssetImage('assets/login-image.png'),
+                  image: const AssetImage('assets/zakat.png'),
                   height: MediaQuery.of(context).size.height * 0.3,
                 ),
-                const Text("Welcome!"),
-                const Text("Dontate where you want, when you want."),
+                Text(
+                  "Get Started",
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+                const Text(
+                    "Fill out the form below to unlock the power of charity."),
                 //Signup input form
                 Container(
                   padding: const EdgeInsets.only(top: 20, bottom: 20),
@@ -58,7 +62,12 @@ class SignUpScreen extends StatelessWidget {
                         SizedBox(
                           width: double.infinity,
                           child: ElevatedButton(
-                              onPressed: () {}, child: const Text("SIGNUP")),
+                            onPressed: () {},
+                            child: const Text("SIGNUP"),
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all(Colors.yellow)),
+                          ),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,

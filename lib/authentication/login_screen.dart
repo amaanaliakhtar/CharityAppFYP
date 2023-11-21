@@ -15,10 +15,13 @@ class LoginScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Image(
-                  image: AssetImage('assets/login-image.png'),
+                  image: AssetImage('assets/zakat.png'),
                   height: MediaQuery.of(context).size.height * 0.3,
                 ),
-                const Text("Welcome!"),
+                Text(
+                  "Welcome!",
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
                 const Text("Dontate where you want, when you want."),
 
                 //Form
