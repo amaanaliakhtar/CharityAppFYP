@@ -15,8 +15,8 @@ class LoginScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Image(
-                  image: AssetImage('assets/zakat.png'),
-                  height: MediaQuery.of(context).size.height * 0.3,
+                  image: AssetImage('assets/logo.png'),
+                  height: MediaQuery.of(context).size.height * 0.4,
                 ),
                 Text(
                   "Welcome!",

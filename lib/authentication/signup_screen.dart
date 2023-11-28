@@ -15,8 +15,8 @@ class SignUpScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Image(
-                  image: const AssetImage('assets/zakat.png'),
-                  height: MediaQuery.of(context).size.height * 0.3,
+                  image: const AssetImage('assets/logo.png'),
+                  height: MediaQuery.of(context).size.height * 0.4,
                 ),
                 Text(
                   "Get Started",
@@ -64,9 +64,6 @@ class SignUpScreen extends StatelessWidget {
                           child: ElevatedButton(
                             onPressed: () {},
                             child: const Text("SIGNUP"),
-                            style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all(Colors.yellow)),
                           ),
                         ),
                         Row(

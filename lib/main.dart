@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'authentication/auth_check.dart';
+import './theme/palette.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,8 +20,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+          primarySwatch: Palette.mainBlue,
+          scaffoldBackgroundColor: const Color(0xFFFCF2E3)),
       home: const LoginScreen(),
     );
   }
