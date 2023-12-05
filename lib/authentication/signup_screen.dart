@@ -1,8 +1,31 @@
+import 'package:charity_app/authentication/auth_service.dart';
 import 'package:charity_app/authentication/login_screen.dart';
+import 'package:charity_app/home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class SignUpScreen extends StatelessWidget {
+class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
+
+  @override
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
+  final AuthService _auth = AuthService();
+
+  TextEditingController _usernameController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+
+  //dispose controllers to avoid memory leak
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +55,7 @@ class SignUpScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextFormField(
+                          controller: _usernameController,
                           decoration: const InputDecoration(
                               label: Text("Full Name"),
                               prefixIcon: Icon(Icons.person_3),
@@ -42,6 +66,7 @@ class SignUpScreen extends StatelessWidget {
                           height: 10,
                         ),
                         TextFormField(
+                          controller: _emailController,
                           decoration: const InputDecoration(
                               label: Text("Email"),
                               prefixIcon: Icon(Icons.mail_outline_rounded),
@@ -51,6 +76,7 @@ class SignUpScreen extends StatelessWidget {
                           height: 10,
                         ),
                         TextFormField(
+                          controller: _passwordController,
                           decoration: const InputDecoration(
                               label: Text("Password"),
                               prefixIcon: Icon(Icons.fingerprint),
@@ -62,7 +88,7 @@ class SignUpScreen extends StatelessWidget {
                         SizedBox(
                           width: double.infinity,
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: _signUp,
                             child: const Text("SIGNUP"),
                           ),
                         ),
@@ -92,5 +118,21 @@ class SignUpScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _signUp() async {
+    String username = _usernameController.text;
+    String email = _emailController.text;
+    String password = _passwordController.text;
+
+    User? user = await _auth.signUp(email, password);
+
+    if (user != null) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const HomeScreen(),
+        ),
+      );
+    }
   }
 }

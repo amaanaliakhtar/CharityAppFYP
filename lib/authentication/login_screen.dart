@@ -15,7 +15,7 @@ class LoginScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Image(
-                  image: AssetImage('assets/logo.png'),
+                  image: const AssetImage('assets/logo.png'),
                   height: MediaQuery.of(context).size.height * 0.4,
                 ),
                 Text(
@@ -27,7 +27,7 @@ class LoginScreen extends StatelessWidget {
                 //Form
                 Form(
                   child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 20),
+                    padding: const EdgeInsets.symmetric(vertical: 20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

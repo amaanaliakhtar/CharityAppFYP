@@ -2,7 +2,6 @@ import 'package:charity_app/authentication/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'authentication/auth_check.dart';
 import './theme/palette.dart';
 
 void main() async {
