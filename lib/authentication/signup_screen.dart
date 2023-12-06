@@ -77,6 +77,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                         TextFormField(
                           controller: _passwordController,
+                          obscureText: true,
                           decoration: const InputDecoration(
                               label: Text("Password"),
                               prefixIcon: Icon(Icons.fingerprint),

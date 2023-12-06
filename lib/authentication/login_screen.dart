@@ -1,8 +1,21 @@
 import 'package:charity_app/authentication/signup_screen.dart';
+import 'package:charity_app/authentication/auth_service.dart';
+import 'package:charity_app/home.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final AuthService _auth = AuthService();
+
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +45,7 @@ class LoginScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextFormField(
+                          controller: _emailController,
                           decoration: const InputDecoration(
                               prefixIcon: Icon(Icons.person_outline_outlined),
                               labelText: "Email",
@@ -42,6 +56,8 @@ class LoginScreen extends StatelessWidget {
                           height: 30,
                         ),
                         TextFormField(
+                          controller: _passwordController,
+                          obscureText: true,
                           decoration: const InputDecoration(
                               prefixIcon: Icon(Icons.fingerprint),
                               suffixIcon: Icon(Icons.remove_red_eye_rounded),
@@ -62,7 +78,9 @@ class LoginScreen extends StatelessWidget {
                         SizedBox(
                           width: double.infinity,
                           child: ElevatedButton(
-                              onPressed: () {}, child: const Text("LOGIN")),
+                            onPressed: _signIn,
+                            child: const Text("LOGIN"),
+                          ),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -90,5 +108,20 @@ class LoginScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _signIn() async {
+    String email = _emailController.text;
+    String password = _passwordController.text;
+
+    User? user = await _auth.signIn(email, password);
+
+    if (user != null) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const HomeScreen(),
+        ),
+      );
+    }
   }
 }
