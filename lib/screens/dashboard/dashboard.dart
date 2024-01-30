@@ -64,24 +64,165 @@ class Dashboard extends StatelessWidget {
 
               //filter options
               SizedBox(
-                width: 170,
-                height: 50,
-                child: Row(
+                height: 45,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  shrinkWrap:
+                      true, //load only currenlty visible elements for rendering speed
                   children: [
-                    Container(
-                      width: 45,
+                    //charity categories
+                    SizedBox(
+                      width: 170,
                       height: 45,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Color(0x212833),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 45,
+                            height: 45,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.black,
+                            ),
+                            child: const Center(
+                              child: Text(
+                                //todo change these to images
+                                "E",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 6,
+                          ),
+                          const Flexible(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Education",
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
                       ),
-                      child: Center(
-                        child: Text(
-                          "E",
-                          style: TextStyle(color: Colors.white),
-                        ),
+                    ),
+                    SizedBox(
+                      width: 170,
+                      height: 45,
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 45,
+                            height: 45,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.black,
+                            ),
+                            child: const Center(
+                              child: Text(
+                                //todo change these to images
+                                "W",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 6,
+                          ),
+                          const Flexible(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Water",
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
                       ),
-                    )
+                    ),
+                    SizedBox(
+                      width: 170,
+                      height: 45,
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 45,
+                            height: 45,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.black,
+                            ),
+                            child: const Center(
+                              child: Text(
+                                //todo change these to images
+                                "FP",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 6,
+                          ),
+                          const Flexible(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Food",
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      width: 170,
+                      height: 45,
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 45,
+                            height: 45,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.black,
+                            ),
+                            child: const Center(
+                              child: Text(
+                                //todo change these to images
+                                "H",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 6,
+                          ),
+                          const Flexible(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Housing",
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               )
