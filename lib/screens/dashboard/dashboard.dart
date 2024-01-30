@@ -1,6 +1,5 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Dashboard extends StatelessWidget {
   const Dashboard({super.key});
@@ -15,21 +14,22 @@ class Dashboard extends StatelessWidget {
         ),
         title: const Text(
           "Charity Navigator",
+          style: TextStyle(color: Colors.black),
         ),
         centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.transparent,
-        actions: [
-          Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.transparent),
-            child: IconButton(
-              onPressed: () {},
-              icon: const Image(image: AssetImage("assets/logo.png")),
-            ),
-          )
-        ],
+        // actions: [
+        //   Container(
+        //     decoration: BoxDecoration(
+        //         borderRadius: BorderRadius.circular(10),
+        //         color: Colors.transparent),
+        //     child: IconButton(
+        //       onPressed: () {},
+        //       icon: const Image(image: AssetImage("assets/logo.png")),
+        //     ),
+        //   )
+        // ],
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -39,7 +39,10 @@ class Dashboard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text("Hey!"),
-              const Text("Explore Charities"),
+              const Text(
+                "Explore Charities",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+              ),
               const SizedBox(
                 height: 20,
               ),
@@ -53,7 +56,16 @@ class Dashboard extends StatelessWidget {
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Search..."),
+                    Opacity(
+                      opacity: 0.4,
+                      child: Text(
+                        "Search...",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
                     Icon(
                       Icons.search,
                       size: 24,
@@ -104,6 +116,7 @@ class Dashboard extends StatelessWidget {
                                 Text(
                                   "Education",
                                   overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),
@@ -139,10 +152,10 @@ class Dashboard extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
-                                  "Water",
-                                  overflow: TextOverflow.ellipsis,
-                                ),
+                                Text("Water",
+                                    overflow: TextOverflow.ellipsis,
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
                               ],
                             ),
                           )
@@ -177,10 +190,10 @@ class Dashboard extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
-                                  "Food",
-                                  overflow: TextOverflow.ellipsis,
-                                ),
+                                Text("Food",
+                                    overflow: TextOverflow.ellipsis,
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
                               ],
                             ),
                           )
@@ -215,10 +228,10 @@ class Dashboard extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
-                                  "Housing",
-                                  overflow: TextOverflow.ellipsis,
-                                ),
+                                Text("Housing",
+                                    overflow: TextOverflow.ellipsis,
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
                               ],
                             ),
                           )
@@ -251,22 +264,21 @@ class Dashboard extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Flexible(
-                                child: Icon(Icons.water_drop),
+                                child: Icon(Icons.menu_book_rounded),
                               ),
                               Flexible(
                                 child: Image(
-                                  image: AssetImage('assets/login-image.png'),
+                                  image: AssetImage('assets/education.png'),
                                 ),
                               ),
                             ],
                           ),
                           SizedBox(height: 20),
-                          Text("Water wells"),
                           Text(
-                            "Give the gift of water",
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          )
+                            "Education for orphans",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
                         ],
                       ),
                     ),
@@ -276,7 +288,7 @@ class Dashboard extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Color(0xFFF7F6F1),
+                        color: const Color(0xFFF7F6F1),
                       ),
                       padding: const EdgeInsets.symmetric(
                           vertical: 20, horizontal: 20),
@@ -291,7 +303,7 @@ class Dashboard extends StatelessWidget {
                               ),
                               Flexible(
                                 child: Image(
-                                  image: AssetImage('assets/login-image.png'),
+                                  image: AssetImage('assets/water.png'),
                                 ),
                               ),
                             ],
@@ -299,14 +311,11 @@ class Dashboard extends StatelessWidget {
                           SizedBox(height: 20),
                           Text(
                             "Give the gift of water",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 16),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
-                          Text(
-                            "Water wells",
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          )
                         ],
                       ),
                     ),
@@ -316,18 +325,77 @@ class Dashboard extends StatelessWidget {
               const SizedBox(height: 4),
               SizedBox(
                 width: double.infinity,
-                child: OutlinedButton(
+                child: ElevatedButton(
+                  style:
+                      ElevatedButton.styleFrom(backgroundColor: Colors.black),
                   onPressed: () {},
                   child: const Text("View All"),
                 ),
               ),
 
               //recommended courses
-              SizedBox(height: 10),
-              Text("Recommended for You"),
+              const SizedBox(height: 10),
+              const Text(
+                "Recommended for You",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              ),
+
+              const SizedBox(
+                height: 5,
+              ),
 
               //Card
-              SizedBox()
+              SizedBox(
+                height: 200,
+                width: 320,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: const Color(0xFFF7F6F1),
+                  ),
+                  padding: const EdgeInsets.all(10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                            child: Text(
+                              "Food packs for orphans",
+                              maxLines: 2,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 18),
+                            ),
+                          ),
+                          Flexible(
+                            child: const Image(
+                              image: AssetImage("assets/food.png"),
+                              height: 110,
+                            ),
+                          )
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {},
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.black),
+                            child: const Icon(
+                              Icons.arrow_forward_rounded,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Text("Find out more!")
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         ),
