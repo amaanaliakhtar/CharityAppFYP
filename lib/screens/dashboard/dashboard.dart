@@ -1,3 +1,4 @@
+import 'package:charity_app/screens/details/project_details.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -379,7 +380,13 @@ class Dashboard extends StatelessWidget {
                       Row(
                         children: [
                           ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => const ProjectDetails(),
+                                ),
+                              );
+                            },
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.black),
                             child: const Icon(
