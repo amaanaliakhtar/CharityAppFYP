@@ -1,6 +1,6 @@
-import 'package:charity_app/screens/details/project_details.dart';
+import 'package:charity_app/screens/projects/all_projects.dart';
+import 'package:charity_app/screens/projects/project_details.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class Dashboard extends StatelessWidget {
   const Dashboard({super.key});
@@ -329,7 +329,13 @@ class Dashboard extends StatelessWidget {
                 child: ElevatedButton(
                   style:
                       ElevatedButton.styleFrom(backgroundColor: Colors.black),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const AllProjects(),
+                      ),
+                    );
+                  },
                   child: const Text("View All"),
                 ),
               ),
