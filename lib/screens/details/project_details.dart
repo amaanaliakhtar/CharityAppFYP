@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProjectDetails extends StatelessWidget {
   const ProjectDetails({super.key});
 
   @override
   Widget build(BuildContext context) {
+    CollectionReference projects =
+        FirebaseFirestore.instance.collection("projects");
+
     return Scaffold(
       appBar: AppBar(
         leading: const Icon(
@@ -29,9 +33,9 @@ class ProjectDetails extends StatelessWidget {
                 color: const Color(0xFFF7F6F1),
               ),
               padding: const EdgeInsets.all(20),
-              child: const Column(
+              child: Column(
                 children: [
-                  Row(
+                  const Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -65,6 +69,42 @@ class ProjectDetails extends StatelessWidget {
                       DonationAmountButton(donationAmount: "20"),
                       DonationAmountButton(donationAmount: "50"),
                     ],
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    decoration: (const BoxDecoration(
+                        border: Border(left: BorderSide(width: 3)))),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Opacity(
+                          opacity: 0.4,
+                          child: Text(
+                            "Donation amount",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                      ], //todo change opacity
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black),
+                      child: Text('Donate now'),
+                    ),
                   )
                 ],
               ),
