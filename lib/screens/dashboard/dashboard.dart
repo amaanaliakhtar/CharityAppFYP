@@ -387,11 +387,11 @@ class Dashboard extends StatelessWidget {
                         children: [
                           ElevatedButton(
                             onPressed: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => const ProjectDetails(),
-                                ),
-                              );
+                              // Navigator.of(context).push(
+                              //   MaterialPageRoute(
+                              //     builder: (context) => const ProjectDetails(),
+                              //   ),
+                              // );
                             },
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.black),

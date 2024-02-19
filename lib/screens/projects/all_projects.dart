@@ -48,31 +48,44 @@ class AllProjects extends StatelessWidget {
           }
 
           return Scaffold(
+              appBar: AppBar(
+                leading: const Icon(
+                  Icons.menu,
+                  color: Colors.black,
+                ),
+                title: const Text(
+                  "Charity Navigator",
+                  style: TextStyle(color: Colors.black),
+                ),
+                centerTitle: true,
+                elevation: 0,
+                backgroundColor: Colors.transparent,
+              ),
               body: SingleChildScrollView(
                   child: Column(children: [
-            Container(
-              margin: const EdgeInsets.all(12),
-              height: 70,
-              width: double.infinity,
-              child: const Card(
-                elevation: 4,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(12))),
-                color: Colors.black,
-                child: Padding(
-                  padding: EdgeInsets.all(12.0),
-                  child: Text(
-                    'Keep up to date with the latest projects from various charity organisations and find the one that resonates with you the most',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold),
+                Container(
+                  margin: const EdgeInsets.all(12),
+                  height: 70,
+                  width: double.infinity,
+                  child: const Card(
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(12))),
+                    color: Colors.black,
+                    child: Padding(
+                      padding: EdgeInsets.all(12.0),
+                      child: Text(
+                        'Keep up to date with the latest projects from various charity organisations and find the one that resonates with you the most',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-            getProjectCards(list)
-          ])));
+                getProjectCards(list)
+              ])));
         }
 
         return const Scaffold(
@@ -150,7 +163,9 @@ class ProjectCard extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => const ProjectDetails(),
+                          builder: (context) => ProjectDetails(
+                            project: data,
+                          ),
                         ),
                       );
                     },

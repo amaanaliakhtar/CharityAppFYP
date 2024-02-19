@@ -1,14 +1,13 @@
+import 'package:charity_app/screens/projects/project_class.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProjectDetails extends StatelessWidget {
-  const ProjectDetails({super.key});
+  final Project project;
+  const ProjectDetails({super.key, required this.project});
 
   @override
   Widget build(BuildContext context) {
-    CollectionReference projects =
-        FirebaseFirestore.instance.collection("projects");
-
     return Scaffold(
       appBar: AppBar(
         leading: const Icon(
@@ -35,7 +34,7 @@ class ProjectDetails extends StatelessWidget {
               padding: const EdgeInsets.all(20),
               child: Column(
                 children: [
-                  const Row(
+                  Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -46,7 +45,7 @@ class ProjectDetails extends StatelessWidget {
                         width: 20,
                       ),
                       Text(
-                        "Give the gift of water",
+                        project.title.toString(),
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 16),
                         maxLines: 2,
@@ -56,7 +55,7 @@ class ProjectDetails extends StatelessWidget {
                   ),
                   SizedBox(height: 20),
                   Text(
-                    'The "Pure Drops for Hope" initiative is a heartfelt charity project dedicated to providing clean drinking water to orphaned children in underprivileged communities worldwide. With a mission to ensure every childs basic right to safe hydration, the project establishes sustainable water purification systems and distributes portable water filtration kits to orphanages in need. Through collaborative efforts with local organizations and volunteers, Pure Drops for Hope not only delivers essential hydration but also empowers orphaned children with the knowledge of water sanitation and hygiene practices.',
+                    project.description,
                   ),
                   SizedBox(
                     height: 20,
