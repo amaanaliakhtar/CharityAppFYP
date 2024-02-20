@@ -175,7 +175,9 @@ class Dashboard extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => const AllProjects(),
+                        builder: (context) => const AllProjects(
+                          filter: '',
+                        ),
                       ),
                     );
                   },
@@ -317,7 +319,15 @@ class FilterButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => AllProjects(
+              filter: filter.category,
+            ),
+          ),
+        );
+      },
       child: SizedBox(
         width: 170,
         height: 45,

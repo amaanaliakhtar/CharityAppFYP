@@ -5,7 +5,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class AllProjects extends StatelessWidget {
-  const AllProjects({super.key});
+  final String filter;
+  const AllProjects({super.key, required this.filter});
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +86,7 @@ class AllProjects extends StatelessWidget {
                     ),
                   ),
                 ),
-                getProjectCards(list)
+                getProjectCards(list, filter)
               ])));
         }
 
@@ -190,80 +191,21 @@ class ProjectCard extends StatelessWidget {
         );
       },
     );
-    // return Card(
-    //   margin: const EdgeInsets.all(12),
-    //   shape: const RoundedRectangleBorder(
-    //       borderRadius: BorderRadius.all(Radius.circular(10))),
-    //   elevation: 4.0,
-    //   child: Column(
-    //     crossAxisAlignment: CrossAxisAlignment.start,
-    //     children: [
-    //       ClipRRect(
-    //         borderRadius: const BorderRadius.only(
-    //             topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-    //         child: Container(
-    //           height: 125,
-    //           decoration: BoxDecoration(
-    //               image: DecorationImage(
-    //                   image: AssetImage(
-    //                     'assets/food.png',
-    //                   ),
-    //                   fit: BoxFit.cover)),
-    //         ),
-    //       ),
-    //       Container(
-    //         margin: const EdgeInsets.fromLTRB(12, 12, 6, 0),
-    //         child: Text(
-    //           data.title.toString(),
-    //           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-    //         ),
-    //       ),
-    //       Container(
-    //         padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
-    //         alignment: Alignment.centerLeft,
-    //         height: 75,
-    //         child: Row(
-    //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //           children: [
-    //             Flexible(
-    //               child: Text(
-    //                 data.description.toString(),
-    //                 overflow: TextOverflow.clip,
-    //                 maxLines: 2,
-    //               ),
-    //             ),
-    //             Flexible(
-    //               child: ElevatedButton(
-    //                 onPressed: () {
-    //                   Navigator.of(context).push(
-    //                     MaterialPageRoute(
-    //                       builder: (context) => ProjectDetails(
-    //                         project: data,
-    //                       ),
-    //                     ),
-    //                   );
-    //                 },
-    //                 style:
-    //                     ElevatedButton.styleFrom(backgroundColor: Colors.black),
-    //                 child: const Icon(
-    //                   Icons.arrow_forward_rounded,
-    //                 ),
-    //               ),
-    //             ),
-    //           ],
-    //         ),
-    //       ), //info
-    //     ],
-    //   ),
-    // );
   }
 }
 
-Widget getProjectCards(List<Project> data) {
+Widget getProjectCards(List<Project> data, filter) {
   List<Widget> cards = <Widget>[];
 
   for (var i = 0; i < data.length; i++) {
-    cards.add(ProjectCard(project: data[i]));
+    if (filter != '') {
+      if (data[i].category == filter) {
+        //appl filters
+        cards.add(ProjectCard(project: data[i]));
+      }
+    } else {
+      cards.add(ProjectCard(project: data[i]));
+    }
   }
 
   return Column(
