@@ -1,6 +1,7 @@
 import 'package:charity_app/screens/projects/project_class.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class ProjectDetails extends StatelessWidget {
   final Project project;
@@ -25,7 +26,9 @@ class ProjectDetails extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            ImageCard(),
+            ImageCard(
+              projectTitle: project.title,
+            ),
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
@@ -116,30 +119,38 @@ class ProjectDetails extends StatelessWidget {
 }
 
 class ImageCard extends StatelessWidget {
-  const ImageCard({super.key});
+  final String projectTitle;
+  const ImageCard({super.key, required this.projectTitle});
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-      elevation: 3,
-      margin: const EdgeInsets.all(12),
-      child: Padding(
-        padding: const EdgeInsets.all(0),
-        child: ClipRRect(
-          borderRadius:
-              BorderRadius.circular(15.0), //needed to make card rounded
-          child: Container(
-            width: double.infinity,
-            height: 200,
-            decoration: const BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage('assets/orphans.jpg'),
-                    fit: BoxFit.cover)),
-          ),
-        ),
-      ),
-    );
+    return FutureBuilder(
+        future: loadImage(projectTitle),
+        builder: (BuildContext context, AsyncSnapshot<String> image) {
+          return Card(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0)),
+            elevation: 3,
+            margin: const EdgeInsets.all(12),
+            child: Padding(
+              padding: const EdgeInsets.all(0),
+              child: ClipRRect(
+                borderRadius:
+                    BorderRadius.circular(15.0), //needed to make card rounded
+                child: Container(
+                  width: double.infinity,
+                  height: 200,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: NetworkImage(
+                            image.data.toString(),
+                          ),
+                          fit: BoxFit.cover)),
+                ),
+              ),
+            ),
+          );
+        });
   }
 }
 
@@ -155,4 +166,19 @@ class DonationAmountButton extends StatelessWidget {
       child: Text('£' + donationAmount),
     );
   }
+}
+
+Future<String> loadImage(title) async {
+  String data = '';
+  String path = title.replaceAll(' ', '').toLowerCase();
+  Reference ref = FirebaseStorage.instance.ref().child("images/$path.jpg");
+
+  try {
+    data = await ref.getDownloadURL();
+  } on FirebaseException {
+    // Handle any errors.
+    //print(e);
+  }
+
+  return data;
 }

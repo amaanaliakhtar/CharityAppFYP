@@ -1,6 +1,7 @@
 import 'package:charity_app/screens/projects/project_details.dart';
 import 'package:charity_app/screens/projects/project_class.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class AllProjects extends StatelessWidget {
@@ -111,77 +112,150 @@ class AllProjects extends StatelessWidget {
 }
 
 class ProjectCard extends StatelessWidget {
-  final Project data;
-  const ProjectCard({super.key, required this.data});
+  final Project project;
+  const ProjectCard({super.key, required this.project});
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.all(12),
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10))),
-      elevation: 4.0,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-            child: Container(
-              height: 125,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage(
-                        'assets/food.png',
-                      ),
-                      fit: BoxFit.cover)),
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.fromLTRB(12, 12, 6, 0),
-            child: Text(
-              data.title.toString(),
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
-            alignment: Alignment.centerLeft,
-            height: 75,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Flexible(
-                  child: Text(
-                    data.description.toString(),
-                    overflow: TextOverflow.clip,
-                    maxLines: 2,
-                  ),
-                ),
-                Flexible(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => ProjectDetails(
-                            project: data,
+    return FutureBuilder(
+      future: loadImage(project.title),
+      builder: (BuildContext context, AsyncSnapshot<String> image) {
+        return Card(
+          margin: const EdgeInsets.all(12),
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10))),
+          elevation: 4.0,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClipRRect(
+                borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10)),
+                child: Container(
+                  height: 125,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: NetworkImage(
+                            image.data.toString(),
                           ),
-                        ),
-                      );
-                    },
-                    style:
-                        ElevatedButton.styleFrom(backgroundColor: Colors.black),
-                    child: const Icon(
-                      Icons.arrow_forward_rounded,
-                    ),
-                  ),
+                          fit: BoxFit.cover)),
                 ),
-              ],
-            ),
-          ), //info
-        ],
-      ),
+              ),
+              Container(
+                margin: const EdgeInsets.fromLTRB(12, 12, 6, 0),
+                child: Text(
+                  project.title.toString(),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 18),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+                alignment: Alignment.centerLeft,
+                height: 75,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        project.description.toString(),
+                        overflow: TextOverflow.clip,
+                        maxLines: 2,
+                      ),
+                    ),
+                    Flexible(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => ProjectDetails(
+                                project: project,
+                              ),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.black),
+                        child: const Icon(
+                          Icons.arrow_forward_rounded,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ), //info
+            ],
+          ),
+        );
+      },
     );
+    // return Card(
+    //   margin: const EdgeInsets.all(12),
+    //   shape: const RoundedRectangleBorder(
+    //       borderRadius: BorderRadius.all(Radius.circular(10))),
+    //   elevation: 4.0,
+    //   child: Column(
+    //     crossAxisAlignment: CrossAxisAlignment.start,
+    //     children: [
+    //       ClipRRect(
+    //         borderRadius: const BorderRadius.only(
+    //             topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+    //         child: Container(
+    //           height: 125,
+    //           decoration: BoxDecoration(
+    //               image: DecorationImage(
+    //                   image: AssetImage(
+    //                     'assets/food.png',
+    //                   ),
+    //                   fit: BoxFit.cover)),
+    //         ),
+    //       ),
+    //       Container(
+    //         margin: const EdgeInsets.fromLTRB(12, 12, 6, 0),
+    //         child: Text(
+    //           data.title.toString(),
+    //           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+    //         ),
+    //       ),
+    //       Container(
+    //         padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+    //         alignment: Alignment.centerLeft,
+    //         height: 75,
+    //         child: Row(
+    //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //           children: [
+    //             Flexible(
+    //               child: Text(
+    //                 data.description.toString(),
+    //                 overflow: TextOverflow.clip,
+    //                 maxLines: 2,
+    //               ),
+    //             ),
+    //             Flexible(
+    //               child: ElevatedButton(
+    //                 onPressed: () {
+    //                   Navigator.of(context).push(
+    //                     MaterialPageRoute(
+    //                       builder: (context) => ProjectDetails(
+    //                         project: data,
+    //                       ),
+    //                     ),
+    //                   );
+    //                 },
+    //                 style:
+    //                     ElevatedButton.styleFrom(backgroundColor: Colors.black),
+    //                 child: const Icon(
+    //                   Icons.arrow_forward_rounded,
+    //                 ),
+    //               ),
+    //             ),
+    //           ],
+    //         ),
+    //       ), //info
+    //     ],
+    //   ),
+    // );
   }
 }
 
@@ -189,10 +263,25 @@ Widget getProjectCards(List<Project> data) {
   List<Widget> cards = <Widget>[];
 
   for (var i = 0; i < data.length; i++) {
-    cards.add(ProjectCard(data: data[i]));
+    cards.add(ProjectCard(project: data[i]));
   }
 
   return Column(
     children: cards,
   );
+}
+
+Future<String> loadImage(title) async {
+  String data = '';
+  String path = title.replaceAll(' ', '').toLowerCase();
+  Reference ref = FirebaseStorage.instance.ref().child("images/$path.jpg");
+
+  try {
+    data = await ref.getDownloadURL();
+  } on FirebaseException {
+    // Handle any errors.
+    //print(e);
+  }
+
+  return data;
 }
