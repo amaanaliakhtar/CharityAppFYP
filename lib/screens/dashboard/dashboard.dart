@@ -1,6 +1,9 @@
+import 'package:charity_app/screens/dashboard/filters_class.dart';
 import 'package:charity_app/screens/projects/all_projects.dart';
 import 'package:charity_app/screens/projects/project_details.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class Dashboard extends StatelessWidget {
   const Dashboard({super.key});
@@ -78,169 +81,9 @@ class Dashboard extends StatelessWidget {
               const SizedBox(height: 20),
 
               //filter options
-              SizedBox(
+              const SizedBox(
                 height: 45,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  shrinkWrap:
-                      true, //load only currenlty visible elements for rendering speed
-                  children: [
-                    //charity categories
-                    SizedBox(
-                      width: 170,
-                      height: 45,
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 45,
-                            height: 45,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.black,
-                            ),
-                            child: const Center(
-                              child: Text(
-                                //todo change these to images
-                                "E",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 6,
-                          ),
-                          const Flexible(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Education",
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      width: 170,
-                      height: 45,
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 45,
-                            height: 45,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.black,
-                            ),
-                            child: const Center(
-                              child: Text(
-                                //todo change these to images
-                                "W",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 6,
-                          ),
-                          const Flexible(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text("Water",
-                                    overflow: TextOverflow.ellipsis,
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold)),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      width: 170,
-                      height: 45,
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 45,
-                            height: 45,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.black,
-                            ),
-                            child: const Center(
-                              child: Text(
-                                //todo change these to images
-                                "FP",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 6,
-                          ),
-                          const Flexible(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text("Food",
-                                    overflow: TextOverflow.ellipsis,
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold)),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      width: 170,
-                      height: 45,
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 45,
-                            height: 45,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.black,
-                            ),
-                            child: const Center(
-                              child: Text(
-                                //todo change these to images
-                                "H",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 6,
-                          ),
-                          const Flexible(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text("Housing",
-                                    overflow: TextOverflow.ellipsis,
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold)),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                child: FilterList(),
               ),
 
               const SizedBox(
@@ -417,6 +260,119 @@ class Dashboard extends StatelessWidget {
   }
 }
 
+class FilterList extends StatelessWidget {
+  const FilterList({super.key});
 
+  @override
+  Widget build(BuildContext context) {
+    CollectionReference filters =
+        FirebaseFirestore.instance.collection('filters');
+
+    return FutureBuilder(
+        future: filters.get(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          //if error
+          if (snapshot.hasError) {
+            return Scaffold(
+              body: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset('images/icons/warning.png'),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Text(
+                      'Error Loading Information',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    )
+                  ],
+                ),
+              ),
+            );
+          }
+
+          if (snapshot.connectionState == ConnectionState.done) {
+            List<FilterClass> list = <FilterClass>[];
+
+            for (var element in snapshot.data!.docs) {
+              list.add(
+                FilterClass(
+                    category: element['category'], display: element['display']),
+              );
+            }
+            return getFilters(list);
+          }
+
+          return const Center();
+        });
+  }
+}
+
+class FilterButton extends StatelessWidget {
+  final FilterClass filter;
+  const FilterButton({super.key, required this.filter});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {},
+      child: SizedBox(
+        width: 170,
+        height: 45,
+        child: Row(
+          children: [
+            Container(
+              width: 45,
+              height: 45,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.black,
+              ),
+              child: Center(
+                child: Text(
+                  //todo change these to images
+                  filter.display,
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+            const SizedBox(
+              width: 6,
+            ),
+            Flexible(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    filter.category,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+Widget getFilters(List<FilterClass> data) {
+  List<Widget> filters = <Widget>[];
+
+  for (var i = 0; i < data.length; i++) {
+    filters.add(FilterButton(filter: data[i]));
+  }
+
+  return ListView(
+    scrollDirection: Axis.horizontal,
+    shrinkWrap: true,
+    children: filters,
+  );
+}
 //TODO
 //change fonts and text size
