@@ -2,6 +2,7 @@ import 'package:charity_app/screens/projects/project_class.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 
 class ProjectDetails extends StatelessWidget {
   final Project project;
@@ -41,29 +42,45 @@ class ProjectDetails extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Flexible(
+                      const Flexible(
                         child: Icon(Icons.water_drop),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 20,
                       ),
                       Text(
                         project.title.toString(),
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 16),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(15.0),
+                    child: LinearPercentIndicator(
+                      animation: true,
+                      lineHeight: 20.0,
+                      animationDuration: 2000,
+                      percent: project.currentDonation / project.donationLimit,
+                      center: Text(
+                          "${project.currentDonation} / ${project.donationLimit}"),
+                      barRadius: const Radius.circular(7),
+                      progressColor: Colors.greenAccent,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
                   Text(
                     project.description,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
-                  Row(
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       DonationAmountButton(donationAmount: "5"),
@@ -72,7 +89,7 @@ class ProjectDetails extends StatelessWidget {
                       DonationAmountButton(donationAmount: "50"),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Container(

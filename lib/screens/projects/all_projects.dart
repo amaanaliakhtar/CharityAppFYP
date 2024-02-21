@@ -45,6 +45,8 @@ class AllProjects extends StatelessWidget {
                 title: element['title'],
                 description: element['description'],
                 category: element['category'],
+                donationLimit: element['donationLimit'],
+                currentDonation: element['currentDonation'],
               ),
             );
           }
