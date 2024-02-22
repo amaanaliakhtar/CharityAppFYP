@@ -42,11 +42,12 @@ class AllProjects extends StatelessWidget {
           for (var element in snapshot.data!.docs) {
             list.add(
               Project(
+                id: element.id,
                 title: element['title'],
                 description: element['description'],
                 category: element['category'],
-                donationLimit: element['donationLimit'],
-                currentDonation: element['currentDonation'],
+                donationLimit: (element['donationLimit']).toDouble(),
+                currentDonation: (element['currentDonation']).toDouble(),
               ),
             );
           }

@@ -1,11 +1,13 @@
 class Project {
+  final String id;
   final String title;
   final String description;
   final String category;
-  final int currentDonation;
-  final int donationLimit;
+  final double currentDonation;
+  final double donationLimit;
 
   Project({
+    required this.id,
     required this.title,
     required this.description,
     required this.category,

@@ -4,10 +4,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
-class ProjectDetails extends StatelessWidget {
+class ProjectDetails extends StatefulWidget {
   final Project project;
   const ProjectDetails({super.key, required this.project});
 
+  @override
+  State<ProjectDetails> createState() => _ProjectDetailsState();
+}
+
+class _ProjectDetailsState extends State<ProjectDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +33,7 @@ class ProjectDetails extends StatelessWidget {
         child: Column(
           children: [
             ImageCard(
-              projectTitle: project.title,
+              projectTitle: widget.project.title,
             ),
             Container(
               decoration: BoxDecoration(
@@ -49,7 +54,7 @@ class ProjectDetails extends StatelessWidget {
                         width: 20,
                       ),
                       Text(
-                        project.title.toString(),
+                        widget.project.title.toString(),
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 16),
                         maxLines: 2,
@@ -66,21 +71,26 @@ class ProjectDetails extends StatelessWidget {
                       animation: true,
                       lineHeight: 20.0,
                       animationDuration: 2000,
-                      percent: project.currentDonation / project.donationLimit,
+                      percent: percentageCalculator(
+                          widget.project.currentDonation,
+                          widget.project.donationLimit),
                       center: Text(
-                          "${project.currentDonation} / ${project.donationLimit}"),
+                          "${widget.project.currentDonation} / ${widget.project.donationLimit}"),
                       barRadius: const Radius.circular(7),
                       progressColor: Colors.greenAccent,
                     ),
                   ),
                   const SizedBox(height: 20),
                   Text(
-                    project.description,
+                    widget.project.description,
                   ),
                   const SizedBox(
                     height: 20,
                   ),
-                  const DonationInput(),
+                  DonationInput(
+                    notifyParent: refresh,
+                    project: widget.project,
+                  ),
                 ],
               ),
             ),
@@ -89,6 +99,18 @@ class ProjectDetails extends StatelessWidget {
       ),
     );
   }
+
+  refresh() {
+    setState(() {});
+  }
+}
+
+double percentageCalculator(currentDonation, donationLimit) {
+  if (currentDonation > donationLimit) {
+    return 1;
+  }
+
+  return currentDonation / donationLimit;
 }
 
 class ImageCard extends StatelessWidget {
@@ -127,20 +149,6 @@ class ImageCard extends StatelessWidget {
   }
 }
 
-class DonationAmountButton extends StatelessWidget {
-  final String donationAmount;
-  const DonationAmountButton({super.key, required this.donationAmount});
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {},
-      style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
-      child: Text('£$donationAmount'),
-    );
-  }
-}
-
 Future<String> loadImage(title) async {
   String data = '';
   String path = title.replaceAll(' ', '').toLowerCase();
@@ -157,7 +165,10 @@ Future<String> loadImage(title) async {
 }
 
 class DonationInput extends StatefulWidget {
-  const DonationInput({super.key});
+  final Project project;
+  final Function() notifyParent;
+  const DonationInput(
+      {super.key, required this.project, required this.notifyParent});
 
   @override
   State<DonationInput> createState() => _DonationInputState();
@@ -238,7 +249,8 @@ class _DonationInputState extends State<DonationInput> {
             height: 30,
             child: TextField(
               keyboardType: TextInputType.number,
-              decoration: InputDecoration(hintText: "Donation amount (£)"),
+              decoration:
+                  const InputDecoration(hintText: "Donation amount (£)"),
               style: const TextStyle(
                 fontSize: 20,
               ),
@@ -255,7 +267,16 @@ class _DonationInputState extends State<DonationInput> {
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              FirebaseFirestore.instance
+                  .collection('projects')
+                  .doc(widget.project.id)
+                  .update({
+                'currentDonation': updateDonation(
+                    widget.project.currentDonation, _donationAmount)
+              });
+              widget.notifyParent(); //refresh the parent widget
+            },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
             child: const Text('Donate now'),
           ),
@@ -263,4 +284,8 @@ class _DonationInputState extends State<DonationInput> {
       ],
     );
   }
+}
+
+double updateDonation(currentDonation, donationAmount) {
+  return currentDonation + double.parse(donationAmount);
 }
