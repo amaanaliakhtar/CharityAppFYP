@@ -80,51 +80,7 @@ class ProjectDetails extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      DonationAmountButton(donationAmount: "5"),
-                      DonationAmountButton(donationAmount: "10"),
-                      DonationAmountButton(donationAmount: "20"),
-                      DonationAmountButton(donationAmount: "50"),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    decoration: (const BoxDecoration(
-                        border: Border(left: BorderSide(width: 3)))),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Opacity(
-                          opacity: 0.4,
-                          child: Text(
-                            "Donation amount",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
-                      ], //todo change opacity
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black),
-                      child: Text('Donate now'),
-                    ),
-                  )
+                  const DonationInput(),
                 ],
               ),
             ),
@@ -180,7 +136,7 @@ class DonationAmountButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: () {},
       style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
-      child: Text('£' + donationAmount),
+      child: Text('£$donationAmount'),
     );
   }
 }
@@ -198,4 +154,113 @@ Future<String> loadImage(title) async {
   }
 
   return data;
+}
+
+class DonationInput extends StatefulWidget {
+  const DonationInput({super.key});
+
+  @override
+  State<DonationInput> createState() => _DonationInputState();
+}
+
+class _DonationInputState extends State<DonationInput> {
+  TextEditingController _controller = TextEditingController();
+  late String _donationAmount = "";
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  _donationAmount = "5.00";
+                  _controller.text = _donationAmount;
+                });
+              },
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
+              child: Text("£5"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  _donationAmount = "10.00";
+                  _controller.text = _donationAmount;
+                });
+              },
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
+              child: Text("£10"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  _donationAmount = "20.00";
+                  _controller.text = _donationAmount;
+                });
+              },
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
+              child: Text("£20"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  _donationAmount = "50.00";
+                  _controller.text = _donationAmount;
+                });
+              },
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
+              child: Text("£50"),
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        Container(
+          decoration:
+              (const BoxDecoration(border: Border(left: BorderSide(width: 3)))),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          child: SizedBox(
+            height: 30,
+            child: TextField(
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(hintText: "Donation amount (£)"),
+              style: const TextStyle(
+                fontSize: 20,
+              ),
+              onChanged: (v) => setState(() {
+                _donationAmount = v;
+              }),
+              controller: _controller,
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
+            child: const Text('Donate now'),
+          ),
+        )
+      ],
+    );
+  }
 }
