@@ -174,7 +174,7 @@ class ProjectCard extends StatelessWidget {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (context) => ProjectDetails(
-                                project: project,
+                                projectId: project.id,
                               ),
                             ),
                           );

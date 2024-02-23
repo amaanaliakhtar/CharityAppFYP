@@ -5,8 +5,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 class ProjectDetails extends StatefulWidget {
-  final Project project;
-  const ProjectDetails({super.key, required this.project});
+  //final Project project;
+  final String projectId;
+  const ProjectDetails({super.key, required this.projectId});
 
   @override
   State<ProjectDetails> createState() => _ProjectDetailsState();
@@ -15,88 +16,146 @@ class ProjectDetails extends StatefulWidget {
 class _ProjectDetailsState extends State<ProjectDetails> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: const Icon(
-          Icons.menu,
-          color: Colors.black,
-        ),
-        title: const Text(
-          "Charity Navigator",
-          style: TextStyle(color: Colors.black),
-        ),
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            ImageCard(
-              projectTitle: widget.project.title,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: const Color(0xFFF7F6F1),
+    CollectionReference project =
+        FirebaseFirestore.instance.collection('projects');
+
+    return FutureBuilder(
+      future: project.doc(widget.projectId).get(),
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return Scaffold(
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset('images/icons/warning.png'),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const Text(
+                    'Error Loading Information',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  )
+                ],
               ),
-              padding: const EdgeInsets.all(20),
+            ),
+          );
+        }
+
+        if (snapshot.connectionState == ConnectionState.done) {
+          var data = snapshot.data!;
+          Project project = Project(
+            id: widget.projectId,
+            title: data["title"],
+            description: data["description"],
+            category: data["category"],
+            currentDonation: (data["currentDonation"]).toDouble(),
+            donationLimit: (data["donationLimit"]).toDouble(),
+          );
+
+          return Scaffold(
+            appBar: AppBar(
+              leading: const Icon(
+                Icons.menu,
+                color: Colors.black,
+              ),
+              title: const Text(
+                "Charity Navigator",
+                style: TextStyle(color: Colors.black),
+              ),
+              centerTitle: true,
+              elevation: 0,
+              backgroundColor: Colors.transparent,
+            ),
+            body: SingleChildScrollView(
               child: Column(
                 children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const Flexible(
-                        child: Icon(Icons.water_drop),
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      Text(
-                        widget.project.title.toString(),
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
+                  ImageCard(
+                    projectTitle: project.title,
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(15.0),
-                    child: LinearPercentIndicator(
-                      animation: true,
-                      lineHeight: 20.0,
-                      animationDuration: 2000,
-                      percent: percentageCalculator(
-                          widget.project.currentDonation,
-                          widget.project.donationLimit),
-                      center: Text(
-                          "${widget.project.currentDonation} / ${widget.project.donationLimit}"),
-                      barRadius: const Radius.circular(7),
-                      progressColor: Colors.greenAccent,
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color(0xFFF7F6F1),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    widget.project.description,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  DonationInput(
-                    notifyParent: refresh,
-                    project: widget.project,
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            const Flexible(
+                              child: Icon(Icons.water_drop),
+                            ),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            Text(
+                              project.title.toString(),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 16),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(15.0),
+                          child: LinearPercentIndicator(
+                            animation: true,
+                            lineHeight: 20.0,
+                            animationDuration: 2000,
+                            percent: percentageCalculator(
+                                project.currentDonation, project.donationLimit),
+                            center: Text(
+                                "${project.currentDonation} / ${project.donationLimit}"),
+                            barRadius: const Radius.circular(7),
+                            progressColor: Colors.greenAccent,
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        Text(
+                          project.description,
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        DonationInput(
+                          notifyParent: refresh,
+                          project: project,
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
-      ),
+          );
+        }
+
+        return const Scaffold(
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  'Loading...',
+                  style: TextStyle(fontSize: 15),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
