@@ -1,6 +1,7 @@
 import 'package:charity_app/authentication/auth_service.dart';
 import 'package:charity_app/authentication/login_screen.dart';
 import 'package:charity_app/home.dart';
+import 'package:charity_app/screens/dashboard/dashboard.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -131,7 +132,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (user != null) {
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => const Home(),
+          builder: (context) => const Dashboard(),
         ),
       );
     }

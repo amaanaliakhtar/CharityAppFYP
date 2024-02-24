@@ -1,8 +1,11 @@
+import 'package:charity_app/authentication/login_screen.dart';
 import 'package:charity_app/screens/donation/donation_class.dart';
 import 'package:charity_app/screens/donation/successful_donation.dart';
+import 'package:charity_app/screens/donation/user_donations.dart';
 import 'package:charity_app/screens/projects/project_class.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -60,15 +63,49 @@ class _ProjectDetailsState extends State<ProjectDetails> {
 
           return Scaffold(
             appBar: AppBar(
-              leading: const Icon(
-                Icons.menu,
+              iconTheme: IconThemeData(
                 color: Colors.black,
               ),
               title: const Text(
                 "Charity Navigator",
                 style: TextStyle(color: Colors.black),
               ),
-              centerTitle: true,
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => MyDonations(),
+                      ),
+                    );
+                  },
+                  icon: Icon(
+                    Icons.book,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => ProfileScreen(
+                          actions: [
+                            SignedOutAction((context) {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => LoginScreen(),
+                                ),
+                              );
+                            })
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                  icon: Icon(
+                    Icons.person,
+                  ),
+                )
+              ],
               elevation: 0,
               backgroundColor: Colors.transparent,
             ),

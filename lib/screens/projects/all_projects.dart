@@ -1,7 +1,10 @@
+import 'package:charity_app/authentication/login_screen.dart';
+import 'package:charity_app/screens/donation/user_donations.dart';
 import 'package:charity_app/screens/projects/project_details.dart';
 import 'package:charity_app/screens/projects/project_class.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 
 class AllProjects extends StatelessWidget {
@@ -54,15 +57,49 @@ class AllProjects extends StatelessWidget {
 
           return Scaffold(
               appBar: AppBar(
-                leading: const Icon(
-                  Icons.menu,
+                iconTheme: IconThemeData(
                   color: Colors.black,
                 ),
                 title: const Text(
                   "Charity Navigator",
                   style: TextStyle(color: Colors.black),
                 ),
-                centerTitle: true,
+                actions: [
+                  IconButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => MyDonations(),
+                        ),
+                      );
+                    },
+                    icon: Icon(
+                      Icons.book,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => ProfileScreen(
+                            actions: [
+                              SignedOutAction((context) {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => LoginScreen(),
+                                  ),
+                                );
+                              })
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                    icon: Icon(
+                      Icons.person,
+                    ),
+                  )
+                ],
                 elevation: 0,
                 backgroundColor: Colors.transparent,
               ),
