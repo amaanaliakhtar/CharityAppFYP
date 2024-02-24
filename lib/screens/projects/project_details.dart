@@ -1,4 +1,7 @@
+import 'package:charity_app/screens/donation/donation_class.dart';
 import 'package:charity_app/screens/projects/project_class.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -234,7 +237,8 @@ class DonationInput extends StatefulWidget {
 }
 
 class _DonationInputState extends State<DonationInput> {
-  TextEditingController _controller = TextEditingController();
+  TextEditingController _donationController = TextEditingController();
+  TextEditingController _reasonController = TextEditingController();
   late String _donationAmount = "";
 
   @override
@@ -244,7 +248,8 @@ class _DonationInputState extends State<DonationInput> {
 
   @override
   void dispose() {
-    _controller.dispose();
+    _donationController.dispose();
+    _reasonController.dispose();
     super.dispose();
   }
 
@@ -259,7 +264,7 @@ class _DonationInputState extends State<DonationInput> {
               onPressed: () {
                 setState(() {
                   _donationAmount = "5.00";
-                  _controller.text = _donationAmount;
+                  _donationController.text = _donationAmount;
                 });
               },
               style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
@@ -269,7 +274,7 @@ class _DonationInputState extends State<DonationInput> {
               onPressed: () {
                 setState(() {
                   _donationAmount = "10.00";
-                  _controller.text = _donationAmount;
+                  _donationController.text = _donationAmount;
                 });
               },
               style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
@@ -279,7 +284,7 @@ class _DonationInputState extends State<DonationInput> {
               onPressed: () {
                 setState(() {
                   _donationAmount = "20.00";
-                  _controller.text = _donationAmount;
+                  _donationController.text = _donationAmount;
                 });
               },
               style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
@@ -289,7 +294,7 @@ class _DonationInputState extends State<DonationInput> {
               onPressed: () {
                 setState(() {
                   _donationAmount = "50.00";
-                  _controller.text = _donationAmount;
+                  _donationController.text = _donationAmount;
                 });
               },
               style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
@@ -316,7 +321,30 @@ class _DonationInputState extends State<DonationInput> {
               onChanged: (v) => setState(() {
                 _donationAmount = v;
               }),
-              controller: _controller,
+              controller: _donationController,
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        Container(
+          padding: EdgeInsets.only(left: 10),
+          decoration: const BoxDecoration(
+            border: Border(
+              left: BorderSide(width: 1),
+              top: BorderSide(width: 1),
+              right: BorderSide(width: 1),
+            ),
+          ),
+          child: SizedBox(
+            height: 150,
+            child: TextField(
+              maxLines: null, // Set this
+              expands: true, // and this
+              keyboardType: TextInputType.multiline,
+              decoration: InputDecoration(hintText: "Reason for donation *"),
+              controller: _reasonController,
             ),
           ),
         ),
@@ -327,14 +355,21 @@ class _DonationInputState extends State<DonationInput> {
           width: double.infinity,
           child: ElevatedButton(
             onPressed: () {
-              FirebaseFirestore.instance
-                  .collection('projects')
-                  .doc(widget.project.id)
-                  .update({
-                'currentDonation': updateDonation(
-                    widget.project.currentDonation, _donationAmount)
-              });
+              postProject(widget.project.id, widget.project.currentDonation,
+                  _donationAmount);
+
               widget.notifyParent(); //refresh the parent widget
+
+              String userId = getUser();
+
+              Donation donation = Donation(
+                  projectId: widget.project.id,
+                  userId: userId,
+                  reason: _reasonController.text,
+                  timestamp: DateTime.now(),
+                  amount: double.parse(_donationAmount));
+
+              postDonation(donation);
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
             child: const Text('Donate now'),
@@ -347,4 +382,29 @@ class _DonationInputState extends State<DonationInput> {
 
 double updateDonation(currentDonation, donationAmount) {
   return currentDonation + double.parse(donationAmount);
+}
+
+String getUser() {
+  final User? user = FirebaseAuth.instance.currentUser;
+
+  if (user != null) {
+    String uid = user.uid;
+
+    return uid;
+  }
+  return '';
+}
+
+void postProject(projectId, currentDonation, donationAmount) {
+  FirebaseFirestore.instance.collection('projects').doc(projectId).update(
+      {'currentDonation': updateDonation(currentDonation, donationAmount)});
+}
+
+void postDonation(Donation donation) {
+  FirebaseFirestore db = FirebaseFirestore.instance;
+
+  db
+      .collection("donations")
+      .add(donation.toMap())
+      .catchError((error) => print('Error: ' + error));
 }
