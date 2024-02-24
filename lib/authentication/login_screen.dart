@@ -120,7 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (user != null) {
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => const Dashboard(),
+          builder: (context) => const Home(),
         ),
       );
     }

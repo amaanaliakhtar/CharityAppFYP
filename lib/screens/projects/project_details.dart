@@ -1,4 +1,5 @@
 import 'package:charity_app/screens/donation/donation_class.dart';
+import 'package:charity_app/screens/donation/successful_donation.dart';
 import 'package:charity_app/screens/projects/project_class.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -370,6 +371,11 @@ class _DonationInputState extends State<DonationInput> {
                   amount: double.parse(_donationAmount));
 
               postDonation(donation);
+
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                    builder: (context) => const DonationSuccess()),
+              );
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
             child: const Text('Donate now'),

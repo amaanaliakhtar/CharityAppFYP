@@ -131,7 +131,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (user != null) {
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => const HomeScreen(),
+          builder: (context) => const Home(),
         ),
       );
     }
