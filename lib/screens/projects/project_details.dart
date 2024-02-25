@@ -9,6 +9,7 @@ import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/services.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 class ProjectDetails extends StatefulWidget {
@@ -351,6 +352,9 @@ class _DonationInputState extends State<DonationInput> {
             height: 30,
             child: TextField(
               keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.digitsOnly
+              ],
               decoration:
                   const InputDecoration(hintText: "Donation amount (£)"),
               style: const TextStyle(
@@ -393,26 +397,47 @@ class _DonationInputState extends State<DonationInput> {
           width: double.infinity,
           child: ElevatedButton(
             onPressed: () {
-              postProject(widget.project.id, widget.project.currentDonation,
-                  _donationAmount);
+              var reason = _reasonController.text;
+              var amount = _donationController.text;
+              if (reason.isNotEmpty &&
+                  amount.isNotEmpty &&
+                  double.parse(amount) >= 1) {
+                postProject(widget.project.id, widget.project.currentDonation,
+                    _donationAmount);
 
-              widget.notifyParent(); //refresh the parent widget
+                widget.notifyParent(); //refresh the parent widget
 
-              String userId = getUser();
+                String userId = getUser();
 
-              Donation donation = Donation(
-                  projectId: widget.project.id,
-                  userId: userId,
-                  reason: _reasonController.text,
-                  timestamp: DateTime.now(),
-                  amount: double.parse(_donationAmount));
+                Donation donation = Donation(
+                    projectId: widget.project.id,
+                    userId: userId,
+                    reason: _reasonController.text,
+                    timestamp: DateTime.now(),
+                    amount: double.parse(_donationAmount));
 
-              postDonation(donation);
+                postDonation(donation);
 
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                    builder: (context) => const DonationSuccess()),
-              );
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (context) => const DonationSuccess()),
+                );
+              } else if (amount.isEmpty) {
+                const snackBar = SnackBar(
+                  content: Text('You must provide a donation amount.'),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              } else if (double.parse(amount) < 1) {
+                const snackBar = SnackBar(
+                  content: Text('Minimum donation is £1.'),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              } else if (reason.isEmpty) {
+                const snackBar = SnackBar(
+                  content: Text('You must provide a reason for donation.'),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              }
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
             child: const Text('Donate now'),
