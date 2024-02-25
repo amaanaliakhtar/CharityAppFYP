@@ -56,55 +56,55 @@ class AllProjects extends StatelessWidget {
           }
 
           return Scaffold(
-              appBar: AppBar(
-                iconTheme: IconThemeData(
-                  color: Colors.black,
-                ),
-                title: const Text(
-                  "Charity Navigator",
-                  style: TextStyle(color: Colors.black),
-                ),
-                actions: [
-                  IconButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => MyDonations(),
-                        ),
-                      );
-                    },
-                    icon: Icon(
-                      Icons.book,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => ProfileScreen(
-                            actions: [
-                              SignedOutAction((context) {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => LoginScreen(),
-                                  ),
-                                );
-                              })
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                    icon: Icon(
-                      Icons.person,
-                    ),
-                  )
-                ],
-                elevation: 0,
-                backgroundColor: Colors.transparent,
+            appBar: AppBar(
+              iconTheme: IconThemeData(
+                color: Colors.black,
               ),
-              body: SingleChildScrollView(
-                  child: Column(children: [
+              title: const Text(
+                "Charity Navigator",
+                style: TextStyle(color: Colors.black),
+              ),
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => MyDonations(),
+                      ),
+                    );
+                  },
+                  icon: Icon(
+                    Icons.book,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => ProfileScreen(
+                          actions: [
+                            SignedOutAction((context) {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => LoginScreen(),
+                                ),
+                              );
+                            })
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                  icon: Icon(
+                    Icons.person,
+                  ),
+                )
+              ],
+              elevation: 0,
+              backgroundColor: Colors.transparent,
+            ),
+            body: SingleChildScrollView(
+              child: Column(children: [
                 Container(
                   margin: const EdgeInsets.all(12),
                   height: 70,
@@ -127,7 +127,9 @@ class AllProjects extends StatelessWidget {
                   ),
                 ),
                 getProjectCards(list, filter)
-              ])));
+              ]),
+            ),
+          );
         }
 
         return const Scaffold(
