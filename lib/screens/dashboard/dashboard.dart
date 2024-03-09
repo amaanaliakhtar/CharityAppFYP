@@ -1,5 +1,6 @@
 import 'package:charity_app/authentication/login_screen.dart';
 import 'package:charity_app/screens/dashboard/filters_class.dart';
+import 'package:charity_app/screens/dashboard/image_upload.dart';
 import 'package:charity_app/screens/donation/user_donations.dart';
 import 'package:charity_app/screens/projects/all_projects.dart';
 import 'package:charity_app/screens/projects/project_details.dart';
@@ -240,7 +241,7 @@ class Dashboard extends StatelessWidget {
                         children: [
                           Flexible(
                             child: Text(
-                              "Food packs for orphans",
+                              "Send us a donation form",
                               maxLines: 2,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 18),
@@ -258,11 +259,11 @@ class Dashboard extends StatelessWidget {
                         children: [
                           ElevatedButton(
                             onPressed: () {
-                              // Navigator.of(context).push(
-                              //   MaterialPageRoute(
-                              //     builder: (context) => const ProjectDetails(),
-                              //   ),
-                              // );
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => const ImageUpload(),
+                                ),
+                              );
                             },
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.black),
