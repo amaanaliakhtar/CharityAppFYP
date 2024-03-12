@@ -127,6 +127,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
     String email = _emailController.text;
     String password = _passwordController.text;
 
+    if (password.length < 6) {
+      const snackBar = SnackBar(
+        content: Text('Password must be at least 6 characters.'),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+
     User? user = await _auth.signUp(email, password);
 
     if (user != null) {

@@ -68,39 +68,43 @@ class _ImageUploadState extends State<ImageUpload> {
           elevation: 0,
           backgroundColor: Colors.transparent,
         ),
-        body: Center(
-          child: Container(
-              margin: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  if (textScanning) const CircularProgressIndicator(),
-                  if (!textScanning && uploadedImage == null)
+        body: SingleChildScrollView(
+          child: Center(
+            child: Container(
+                margin: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    if (textScanning) const CircularProgressIndicator(),
+                    if (!textScanning && uploadedImage == null)
+                      Container(
+                        width: 300,
+                        height: 300,
+                        color: Colors.grey,
+                      ),
+                    if (uploadedImage != null)
+                      Image.file(File(uploadedImage!.path)),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        uploadOptionButton(
+                            Icon(Icons.image_rounded), "Gallery"),
+                        uploadOptionButton(
+                            Icon(Icons.camera_enhance), "Camera"),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
                     Container(
-                      width: 300,
-                      height: 300,
-                      color: Colors.grey,
-                    ),
-                  if (uploadedImage != null)
-                    Image.file(File(uploadedImage!.path)),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      uploadOptionButton(Icon(Icons.image_rounded), "Gallery"),
-                      uploadOptionButton(Icon(Icons.camera_enhance), "Camera"),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    child: Text(
-                      scannedText,
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  )
-                ],
-              )),
+                      child: Text(
+                        scannedText,
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    )
+                  ],
+                )),
+          ),
         ));
   }
 

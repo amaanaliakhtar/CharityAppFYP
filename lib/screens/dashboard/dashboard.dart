@@ -79,31 +79,31 @@ class Dashboard extends StatelessWidget {
               ),
 
               //search bar
-              Container(
-                decoration: (const BoxDecoration(
-                    border: Border(left: BorderSide(width: 3)))),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Opacity(
-                      opacity: 0.4,
-                      child: Text(
-                        "Search...",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                    Icon(
-                      Icons.search,
-                      size: 24,
-                    )
-                  ], //todo change opacity
-                ),
-              ),
+              // Container(
+              //   decoration: (const BoxDecoration(
+              //       border: Border(left: BorderSide(width: 3)))),
+              //   padding:
+              //       const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              //   child: const Row(
+              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //     children: [
+              //       Opacity(
+              //         opacity: 0.4,
+              //         child: Text(
+              //           "Search...",
+              //           style: TextStyle(
+              //             fontWeight: FontWeight.bold,
+              //             fontSize: 20,
+              //           ),
+              //         ),
+              //       ),
+              //       Icon(
+              //         Icons.search,
+              //         size: 24,
+              //       )
+              //     ], //todo change opacity
+              //   ),
+              // ),
 
               const SizedBox(height: 20),
 
